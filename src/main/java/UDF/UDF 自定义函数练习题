@@ -1,0 +1,38 @@
+某系统的运行日志如下（cvs格式）
+Date                  ip          账号                 url                       响应时间   访问结果
+[2013-03-04 23:38:27]  173.15.76.4       fatp@123.com   get  / service/2.htm  HTTP/ 1.0      0.1s      OK
+[2014-04-04 23:38:28]  173 .103.89.101    fatp@123.com   get  / service/2.htm  HTTP/ 1.0      500ms    OK
+[2016-03-04 21:34:01]  175.150.76.33     node@sina.com  get  / service/2.htm  HTTP/ 1.0      0.1s      ok
+[2021-02-04 09:17:23]  176.151.33.45       chahu        post  / service/2.htm  HTTP/ 1.0    500ms     OK
+
+使用hive的自定义函数实现如下功能：
+1）实现formatDate函数，该函数可以将Date字段修改为如下形式：
+formatDate (‘[2013-03-04 23:38:27]’) = ‘2013/03/04 23:38:27’
+
+2）实现getProvince函数，该函数可以将IP转换为对应的省份。IP与省份的对应关系如下：
+    IP            省份
+173.*.*.*      江苏
+174.*.*.*      上海
+175.*.*.*      北京
+176.*.*.*      广州
+
+3）实现isValidUser函数，该函数可以对账号进行有效性检查，如果账号为邮件格式，则返回1，否则返回0
+  例如：isValidUser(‘fatp@123.com’)=1, isValidUser(‘chahu’)=0
+
+4）实现FormatUrL函数，该函数对url字段进行处理，url字段由3部分组成：
+操作符  访问url      访问协议
+get  / service/2.htm  HTTP/ 1.0
+
+其中操作符、访问url和访问协议之间分别由1个空格分隔，本函数将这3个字段调整为如下格式：
+操作符：访问url+访问协议。
+例如：FormatUrL(‘get  / service/2.htm  HTTP/ 1.0’) = ‘get：/ service/2.htm+HTTP/1.0’
+ 　
+5)实现getResponseTime函数，该函数将秒为单位的数据改为毫秒。
+例如：getResponseTime(‘0.1s’) = ‘100ms’  getResponseTime(‘500ms’) = ‘500ms’
+
+6）实现formatResult函数，该函数将访问结果中的小写数据改为大写数据
+例如formatResult(‘ok’) = ‘OK’
+
+【参考：
+https://www.jianshu.com/p/1e4af109749a?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation
+】
